@@ -1,34 +1,91 @@
 package com.jewelry_ecom_platform.auth_service.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@Data // includes getters/setters, equals, hashCode, toString
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder // required f
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
-    private String role; // CUSTOMER, SELLER, ADMIN
 
+    @Column(nullable = false)
+    private String role;
+
+    @Column(nullable = false)
     private boolean emailVerified;
+
+    @Column
+    private String verificationToken;
+
+    @Column
+    private LocalDateTime verificationTokenExpiry;
+
+    @Column
+    private String resetPasswordToken;
+
+    @Column
+    private LocalDateTime resetPasswordTokenExpiry;
+
+    @Column
+    private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public User() {
+    }
+
+    public User(Long id, String email, String password, String role, boolean emailVerified, String verificationToken, LocalDateTime verificationTokenExpiry, String resetPasswordToken, LocalDateTime resetPasswordTokenExpiry, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.emailVerified = emailVerified;
+        this.verificationToken = verificationToken;
+        this.verificationTokenExpiry = verificationTokenExpiry;
+        this.resetPasswordToken = resetPasswordToken;
+        this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public User(Builder builder){
+        this.id = builder.id;
+        this.email = builder.email;
+        this.password = builder.password;
+        this.role = builder.role;
+        this.emailVerified = builder.emailVerified;
+        this.verificationToken = builder.verificationToken;
+        this.verificationTokenExpiry = builder.verificationTokenExpiry;
+        this.resetPasswordToken = builder.resetPasswordToken;
+        this.resetPasswordTokenExpiry = builder.resetPasswordTokenExpiry;
+        this.createdAt = builder.createdAt;
+        this.updatedAt = builder.updatedAt;
+    }
 
     public Long getId() {
         return id;
@@ -70,40 +127,131 @@ public class User {
         this.emailVerified = emailVerified;
     }
 
-    public static class Builder {
-        private final User user;
+    public String getVerificationToken() {
+        return verificationToken;
+    }
 
-        public Builder() {
-            user = new User();
-        }
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+    }
 
-        public Builder email(String email) {
-            user.setEmail(email);
-            return this;
-        }
+    public LocalDateTime getVerificationTokenExpiry() {
+        return verificationTokenExpiry;
+    }
 
-        public Builder password(String password) {
-            user.setPassword(password);
-            return this;
-        }
+    public void setVerificationTokenExpiry(LocalDateTime verificationTokenExpiry) {
+        this.verificationTokenExpiry = verificationTokenExpiry;
+    }
 
-        public Builder role(String role) {
-            user.setRole(role);
-            return this;
-        }
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
 
-        public Builder emailVerified(boolean verified) {
-            user.setEmailVerified(verified);
-            return this;
-        }
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
 
-        public User build() {
-            return user;
-        }
+    public LocalDateTime getResetPasswordTokenExpiry() {
+        return resetPasswordTokenExpiry;
+    }
+
+    public void setResetPasswordTokenExpiry(LocalDateTime resetPasswordTokenExpiry) {
+        this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public static Builder builder() {
         return new Builder();
     }
-}
 
+    public static class Builder {
+        private Long id;
+        private String email;
+        private String password;
+        private String role;
+        private boolean emailVerified;
+        private String verificationToken;
+        private LocalDateTime verificationTokenExpiry;
+        private String resetPasswordToken;
+        private LocalDateTime resetPasswordTokenExpiry;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder role(String role) {
+            this.role = role;
+            return this;
+        }
+
+        public Builder emailVerified(boolean emailVerified) {
+            this.emailVerified = emailVerified;
+            return this;
+        }
+
+        public Builder verificationToken(String verificationToken) {
+            this.verificationToken = verificationToken;
+            return this;
+        }
+
+        public Builder verificationTokenExpiry(LocalDateTime verificationTokenExpiry) {
+            this.verificationTokenExpiry = verificationTokenExpiry;
+            return this;
+        }
+
+        public Builder resetPasswordToken(String resetPasswordToken) {
+            this.resetPasswordToken = resetPasswordToken;
+            return this;
+        }
+
+        public Builder resetPasswordTokenExpiry(LocalDateTime resetPasswordTokenExpiry) {
+            this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
+            return this;
+        }
+
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public User build() {
+            return new User(id, email, password, role, emailVerified,
+                    verificationToken, verificationTokenExpiry,
+                    resetPasswordToken, resetPasswordTokenExpiry,
+                    createdAt, updatedAt);
+        }
+    }
+}
