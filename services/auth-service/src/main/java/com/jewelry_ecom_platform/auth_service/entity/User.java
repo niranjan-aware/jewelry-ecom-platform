@@ -1,10 +1,7 @@
 package com.jewelry_ecom_platform.auth_service.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
@@ -58,20 +55,7 @@ public class User {
 
     public User() {
     }
-
-    public User(Long id, String email, String password, String role, boolean emailVerified, String verificationToken, LocalDateTime verificationTokenExpiry, String resetPasswordToken, LocalDateTime resetPasswordTokenExpiry, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.emailVerified = emailVerified;
-        this.verificationToken = verificationToken;
-        this.verificationTokenExpiry = verificationTokenExpiry;
-        this.resetPasswordToken = resetPasswordToken;
-        this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    
 
     public User(Builder builder){
         this.id = builder.id;
@@ -248,10 +232,7 @@ public class User {
         }
 
         public User build() {
-            return new User(id, email, password, role, emailVerified,
-                    verificationToken, verificationTokenExpiry,
-                    resetPasswordToken, resetPasswordTokenExpiry,
-                    createdAt, updatedAt);
+            return new User(this);
         }
     }
 }
